@@ -13,10 +13,22 @@
         <action
             android:id="@+id/action_listItemFragment_to_detailsItemFragment"
             app:destination="@id/detailsItemFragment" />
+        <action
+            android:id="@+id/action_listItemFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsItemFragment"
         android:name="com.example.inventorylistapp.ui.DetailsItemFragment"
         android:label="fragment_details_item"
         tools:layout="@layout/fragment_details_item" />
+    <fragment
+        android:id="@+id/addItemFragment"
+        android:name="com.example.inventorylistapp.ui.AddItemFragment"
+        android:label="fragment_add_item"
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_addItemFragment_to_listItemFragment"
+            app:destination="@id/listItemFragment" />
+    </fragment>
 </navigation>
