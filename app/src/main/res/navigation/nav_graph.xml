@@ -25,6 +25,9 @@
         <argument
             android:name="id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailsItemFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -37,5 +40,9 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="item_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>

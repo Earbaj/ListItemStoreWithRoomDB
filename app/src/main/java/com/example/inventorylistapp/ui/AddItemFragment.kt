@@ -5,14 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.inventorylistapp.data.InventoryApplication
+import com.example.inventorylistapp.data.Item
 import com.example.inventorylistapp.databinding.FragmentAddItemBinding
 import com.example.inventorylistapp.viewmodel.InventoryViewModel
 import com.example.inventorylistapp.viewmodel.InventoryViewModelFactory
+import kotlinx.coroutines.launch
 
 class AddItemFragment : Fragment() {
+
+    private val navigationArgs: AddItemFragmentArgs by navArgs()
 
     private val viewModel: InventoryViewModel by activityViewModels {
         InventoryViewModelFactory(
@@ -24,10 +32,8 @@ class AddItemFragment : Fragment() {
     private var _binding: FragmentAddItemBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var item: Item
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +46,18 @@ class AddItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnSaveData.setOnClickListener {
-            addItem()
+        val id = navigationArgs.itemId
+        if(id > 0){
+            lifecycle.coroutineScope.launch {
+                viewModel.retrieveItem(id).collect(){
+                    item = it
+                    bind(item)
+                }
+            }
+        }else{
+            binding.btnSaveData.setOnClickListener {
+                addItem()
+            }
         }
     }
 
@@ -63,6 +79,37 @@ class AddItemFragment : Fragment() {
             binding.etPriceTxt.text.toString(),
             binding.etQuantityTxt.text.toString()
         )
+    }
+
+    private fun bind(item: Item){
+        val price = "%.2f".format(item.itemPrice)
+        binding.apply {
+            etNameTxt.setText(item.itemName, TextView.BufferType.SPANNABLE)
+            etPriceTxt.setText(price, TextView.BufferType.SPANNABLE)
+            etQuantityTxt.setText(item.quantityInStock.toString(), TextView.BufferType.SPANNABLE)
+            btnSaveData.setOnClickListener {
+                updateItem()
+            }
+        }
+    }
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.etNameTxt.text.toString(),
+            binding.etPriceTxt.text.toString(),
+            binding.etQuantityTxt.text.toString()
+        )
+    }
+    private fun updateItem() {
+        if (isEntryValid()) {
+            viewModel.updateItem(
+                this.navigationArgs.itemId,
+                this.binding.etNameTxt.text.toString(),
+                this.binding.etPriceTxt.text.toString(),
+                this.binding.etQuantityTxt.text.toString()
+            )
+            val action = AddItemFragmentDirections.actionAddItemFragmentToListItemFragment()
+            this.findNavController().navigate(action)
+        }
     }
 
 }

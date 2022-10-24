@@ -63,6 +63,13 @@ class DetailsItemFragment : Fragment() {
                 showConfirmationDialog()
             }
             btnSell.setOnClickListener { viewModel.sellItem(item) }
+            floatingActionButton2.setOnClickListener {
+                val action = DetailsItemFragmentDirections.actionDetailsItemFragmentToAddItemFragment(
+                    "Edit Item",
+                    item.id
+                )
+                findNavController().navigate(action)
+            }
         }
     }
 
