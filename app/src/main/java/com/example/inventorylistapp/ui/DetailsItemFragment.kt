@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.inventorylistapp.R
 import com.example.inventorylistapp.data.InventoryApplication
 import com.example.inventorylistapp.data.Item
 import com.example.inventorylistapp.data.getFormattedPrice
@@ -34,15 +33,11 @@ class DetailsItemFragment : Fragment() {
     private var _binding: FragmentDetailsItemBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentDetailsItemBinding.inflate(inflater,container,false)
         return binding.root
@@ -67,6 +62,7 @@ class DetailsItemFragment : Fragment() {
             btnDelete.setOnClickListener {
                 showConfirmationDialog()
             }
+            btnSell.setOnClickListener { viewModel.sellItem(item) }
         }
     }
 
