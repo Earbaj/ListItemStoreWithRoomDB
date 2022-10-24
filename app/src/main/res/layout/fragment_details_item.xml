@@ -27,7 +27,7 @@
         tools:layout_editor_absoluteX="36dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txt_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -49,13 +49,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
-        android:text="Save"
+        android:text="Delete"
         app:layout_constraintEnd_toEndOf="@+id/btn_sell"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_sell"

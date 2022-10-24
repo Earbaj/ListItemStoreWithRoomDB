@@ -21,14 +21,21 @@
         android:id="@+id/detailsItemFragment"
         android:name="com.example.inventorylistapp.ui.DetailsItemFragment"
         android:label="fragment_details_item"
-        tools:layout="@layout/fragment_details_item" />
+        tools:layout="@layout/fragment_details_item" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.example.inventorylistapp.ui.AddItemFragment"
-        android:label="fragment_add_item"
-        tools:layout="@layout/fragment_add_item" >
+        android:label="{title}"
+        tools:layout="@layout/fragment_add_item">
         <action
             android:id="@+id/action_addItemFragment_to_listItemFragment"
             app:destination="@id/listItemFragment" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
 </navigation>
