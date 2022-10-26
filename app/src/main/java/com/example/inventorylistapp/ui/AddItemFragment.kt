@@ -46,7 +46,9 @@ class AddItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Get specific id from previous fragment
         val id = navigationArgs.itemId
+
         if(id > 0){
             lifecycle.coroutineScope.launch {
                 viewModel.retrieveItem(id).collect(){
@@ -61,6 +63,7 @@ class AddItemFragment : Fragment() {
         }
     }
 
+    //Methode for add new item's to database
     private fun addItem() {
         if (validEntryCheck()) {
             viewModel.addNewItem(
@@ -73,6 +76,7 @@ class AddItemFragment : Fragment() {
         }
     }
 
+    //Check input validation's
     private fun validEntryCheck(): Boolean {
         return viewModel.isEntryValid(
             binding.etNameTxt.text.toString(),
@@ -81,6 +85,15 @@ class AddItemFragment : Fragment() {
         )
     }
 
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.etNameTxt.text.toString(),
+            binding.etPriceTxt.text.toString(),
+            binding.etQuantityTxt.text.toString()
+        )
+    }
+
+    //Bind view with the fragment
     private fun bind(item: Item){
         val price = "%.2f".format(item.itemPrice)
         binding.apply {
@@ -92,13 +105,8 @@ class AddItemFragment : Fragment() {
             }
         }
     }
-    private fun isEntryValid(): Boolean {
-        return viewModel.isEntryValid(
-            binding.etNameTxt.text.toString(),
-            binding.etPriceTxt.text.toString(),
-            binding.etQuantityTxt.text.toString()
-        )
-    }
+
+    //Methode for update existing item's
     private fun updateItem() {
         if (isEntryValid()) {
             viewModel.updateItem(

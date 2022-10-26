@@ -54,15 +54,19 @@ class DetailsItemFragment : Fragment() {
         }
     }
 
+    //Bind view with the fragment
     private fun bind(item: Item){
         binding.apply {
             txtName.text = item.itemName
             txtPrice.text = item.getFormattedPrice()
             txtQuantity.text = item.quantityInStock.toString()
+            //For delete item
             btnDelete.setOnClickListener {
                 showConfirmationDialog()
             }
+            //For sell item
             btnSell.setOnClickListener { viewModel.sellItem(item) }
+            //For edit item
             floatingActionButton2.setOnClickListener {
                 val action = DetailsItemFragmentDirections.actionDetailsItemFragmentToAddItemFragment(
                     "Edit Item",
@@ -73,11 +77,13 @@ class DetailsItemFragment : Fragment() {
         }
     }
 
+    //Methode for delete data
     private fun deleteItem() {
         viewModel.delete(item)
         findNavController().navigateUp()
     }
 
+    //Show alart dialog before delete
     private fun showConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
