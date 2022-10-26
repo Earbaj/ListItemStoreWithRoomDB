@@ -9,42 +9,20 @@ import kotlinx.coroutines.launch
 
 class InventoryViewModel(private val itemDao: ItemDao):ViewModel() {
 
+    //Get all data from database
     val allItems: Flow<List<Item>> = itemDao.getItems()
 
+    //Get data from database with specific id
     fun retrieveItem(id: Int): Flow<Item> {
         return itemDao.getItem(id)
     }
 
+    //For insert data into database
     private fun insertData(item: Item){
         viewModelScope.launch {
             itemDao.insert(item)
         }
     }
-
-    private fun deleteItem(item: Item){
-        viewModelScope.launch {
-            itemDao.delete(item)
-        }
-    }
-
-    private fun updateItem(item: Item){
-        viewModelScope.launch {
-            itemDao.update(item)
-        }
-    }
-
-    fun sellItem(item: Item) {
-        if (item.quantityInStock > 0) {
-            // Decrease the quantity by 1
-            val newItem = item.copy(quantityInStock = item.quantityInStock - 1)
-            updateItem(newItem)
-        }
-    }
-
-    fun delete(item: Item){
-        deleteItem(item)
-    }
-
     private fun getNewItem(itemName: String, itemPrice: String, itemQuantity: String): Item{
         return Item(
             itemName = itemName,
@@ -57,11 +35,30 @@ class InventoryViewModel(private val itemDao: ItemDao):ViewModel() {
         val item = getNewItem(itemName,itemPrice,itemQuantity)
         insertData(item)
     }
-    fun isEntryValid(itemName: String, itemPrice: String, itemCount: String): Boolean {
-        if (itemName.isBlank() || itemPrice.isBlank() || itemCount.isBlank()) {
-            return false
+
+    //For deleting items from database
+    private fun deleteItem(item: Item){
+        viewModelScope.launch {
+            itemDao.delete(item)
         }
-        return true
+    }
+    fun sellItem(item: Item) {
+        if (item.quantityInStock > 0) {
+            // Decrease the quantity by 1
+            val newItem = item.copy(quantityInStock = item.quantityInStock - 1)
+            updateItem(newItem)
+        }
+    }
+
+    fun delete(item: Item){
+        deleteItem(item)
+    }
+
+    //For updating existing items from databse
+    private fun updateItem(item: Item){
+        viewModelScope.launch {
+            itemDao.update(item)
+        }
     }
     private fun getUpdatedItemEntry(
         itemId: Int,
@@ -85,4 +82,14 @@ class InventoryViewModel(private val itemDao: ItemDao):ViewModel() {
         val updatedItem = getUpdatedItemEntry(itemId, itemName, itemPrice, itemCount)
         updateItem(updatedItem)
     }
+
+
+    //Check for edit text validation
+    fun isEntryValid(itemName: String, itemPrice: String, itemCount: String): Boolean {
+        if (itemName.isBlank() || itemPrice.isBlank() || itemCount.isBlank()) {
+            return false
+        }
+        return true
+    }
+
 }
